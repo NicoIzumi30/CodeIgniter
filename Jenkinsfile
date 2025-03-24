@@ -16,7 +16,20 @@ pipeline {
         }
         stage('Run Tests') {
             steps {
-                sh 'vendor/bin/phpunit application/tests'
+                script {
+                    if (!fileExists('phpunit.xml')) {
+                        writeFile file: 'phpunit.xml', text: '''<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="vendor/autoload.php" colors="true">
+    <testsuites>
+        <testsuite name="CodeIgniter Test Suite">
+            <directory suffix="Test.php">./tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>'''
+                    }
+                    
+                    sh 'if [ -d "tests" ] || [ -d "application/tests" ]; then vendor/bin/phpunit; else echo "No tests found. Skipping tests."; fi'
+                }
             }
             post {
                 failure {

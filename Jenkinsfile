@@ -16,7 +16,7 @@ pipeline {
         }
         stage('Run Tests') {
             steps {
-                sh 'vendor/bin/phpunit'
+                sh 'vendor/bin/phpunit application/tests'
             }
             post {
                 failure {

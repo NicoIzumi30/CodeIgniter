@@ -12,7 +12,7 @@ pipeline {
  }
  stage('Install Dependencies') {
  steps {
- sh 'composer install --no-dev --optimize-autoloader'
+ sh 'composer install --optimize-autoloader --ignore-platform-req=ext-dom --no-scripts'
  }
  }
  stage('Run Tests') {
